@@ -21,8 +21,6 @@ describe Airport do
 
   describe 'take off' do
     it 'instructs a plane to take off' do
-      subject.weather = 'sunny'
-      subject.take_off_order
       expect(subject).to respond_to(:take_off_order)
     end
 
@@ -33,13 +31,13 @@ describe Airport do
 
   describe 'landing' do
     it 'instructs a plane to land' do
-      subject.weather = 'sunny'
+      allow(subject).to receive(:weather).and_return('sunny')
       subject.landing_order(flying_plane)
       expect(subject.planes).to include flying_plane
     end
 
     it 'receives a plane' do
-      subject.weather = 'sunny'
+      allow(subject).to receive(:weather).and_return('sunny')
       expect(flying_plane).to receive(:landed=).with(true)
       subject.landing_order(flying_plane)
       subject.receive(flying_plane)
@@ -58,7 +56,7 @@ describe Airport do
       end
 
       it 'does not allow a plane to land' do
-        subject.weather = 'sunny'
+        allow(subject).to receive(:weather).and_return('sunny')
         expect { subject.capacity.times { subject.landing_order(flying_plane) } }.to raise_error "Airport is full"
       end
     end
@@ -69,12 +67,12 @@ describe Airport do
       end
 
       it 'does not allow a plane to take off' do
-        subject.weather = 'stormy'
+        allow(subject).to receive(:weather).and_return('stormy')
         expect { subject.take_off_order }.to raise_error "Bad Weather - cannot take off for now"
       end
 
       it 'does not allow a plane to land' do
-        subject.weather = 'stormy'
+        allow(subject).to receive(:weather).and_return('stormy')
         expect { subject.landing_order(flying_plane) }.to raise_error "Bad Weather - cannot land for now"
       end
     end

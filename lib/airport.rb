@@ -6,19 +6,19 @@ class Airport
 
   def initialize capacity = 5
     @capacity = capacity
-    @weather = self.weather
+    @weather = weather
     @planes = Array.[](Plane.new true)
   end
 
   def take_off_order
-    fail "Bad Weather - cannot take off for now" if @weather == 'stormy'
+    fail "Bad Weather - cannot take off for now" if weather == 'stormy'
     @planes.last.take_off
   end
 
   def landing_order plane
     if full?
       fail "Airport is full"
-    elsif @weather == 'stormy'
+    elsif weather == 'stormy'
       fail 'Bad Weather - cannot land for now'
     else
       @planes << plane
@@ -29,9 +29,11 @@ class Airport
     if planes.include?(plane) != true
       fail "Plane not instructed to land"
     else
-      @planes.last.landed = true
+      planes.last.landed = true
     end
   end
+
+#private
 
   def release
     @planes.pop
